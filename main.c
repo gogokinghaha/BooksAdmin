@@ -20,7 +20,8 @@ void print(S *);//输出链表函数
 void pop_sort(S *);//排序
 void insert(S *);//插入节点函数
 void del(S *);//删除节点函数
-void search4(S *);//价格查找
+void search(S *);//价格查找
+void textinput(S *);//文件写入
 void mod(S *);//修改图书信息
      //主函数
 int main()
@@ -63,10 +64,15 @@ void choose()
                 get(head);
                 break;
             case 6://价格查找
-                search4(head);
+                search(head);
                 break;
             case 7:
                 input(head);
+                printf("编号\t书名\t价格\n");
+                print(head);
+                break;
+            case 8:
+                textinput(head);
                 printf("编号\t书名\t价格\n");
                 print(head);
                 break;
@@ -90,9 +96,10 @@ void menu()
     printf("\t\t|\t5.取值                 |\n");
     printf("\t\t|\t6.价格搜索             |\n");
     printf("\t\t|\t7.添加                 |\n");
-    printf("\t\t|\t8.退出程序             |\n");
+    printf("\t\t|\t8.文件添加             |\n");
+    printf("\t\t|\t9.退出程序             |\n");
     printf("\t\t|------------------------------|\n");
-    printf("\t\t\tchoice(1-7):\n");
+    printf("\t\t\tchoice(1-8):\n");
 }
 //创建链表模块
 S *create()
@@ -101,6 +108,7 @@ S *create()
     int i;
     head = (S *)malloc(sizeof(S));//头节点开辟空间
     head->next = NULL;//置空头节点的指针域
+    printf("创建成功");
     q = head;//q指针记录头节点的地址
     p = head->next;//p指针记录头节点的指针域的地址
 
@@ -167,6 +175,55 @@ void input(S *head)
     }
     return head;//返回链表的起始地址
 
+
+}
+
+//通过文件添加数据
+void textinput(S *head)
+{
+    FILE *fp;
+    S *p, *q;//定义指针
+    //q = head;//q指针记录头节点的地址
+    p = head->next;//p指针记录头节点的指针域的地址
+	int i = 0;
+	int j = 0;
+	float PRICE;//接收文件读出来的数据
+	char  NAME[20], ID[20];
+	fp = fopen("text.txt","r");//打开文件
+	if(fp == NULL)
+    {
+        printf("读取文件失败\n");
+        exit(0);
+    }
+    else
+    {
+        printf("添加文件成功\n");
+    }
+    /*if(p == NULL)
+    {
+        printf("请创建链表");
+    }*/
+    while(p->next != NULL)
+    {
+        p = p->next;
+    }
+    while(!feof(fp))
+    {
+        //fgets(line)
+        q = (S *)malloc(sizeof(S));//p指针开辟空间
+        //fscanf(fp,"%s %s %f", &ID, &NAME, &PRICE);
+        fscanf(fp,"%s %s %f", &q->id, &q->name,&q->price);
+
+        //q->id = ID;
+        //q->name = NAME;
+        //q->price = PRICE;
+
+        q->next = p->next;
+        p->next = q;//置空p节点的指针域
+        p = q;
+
+        //printf("读到的数据是:%s %s %.1f",ID,NAME,PRICE);
+    }
 
 }
 
@@ -269,7 +326,7 @@ void del(S *head)
 }
 
 //价格查找
-void search4(S *head)
+void search(S *head)
 {
     S *p;//定义指针
     int price1;//定义num1用于输入查找书籍
@@ -294,6 +351,18 @@ void search4(S *head)
         printf("ERROR INPUT\n");
 }
 
+//输出链表模块
+void print(S *head)
+{
+    int i;
+    S *p = head->next;
+    while (p)//当p不为空的时候执行
+    {
+        printf("%s\t%s\t%.2f\n", p->id, p->name, p->price);
+        //printf("\n");
+        p = p->next;//指针后移
+    }
+}
 
 //修改信息模块
 /*void mod(S *head)
@@ -353,15 +422,5 @@ void pop_sort(S *head)   //链表冒泡排序
   tail = p;
  }
 }*/
-//输出链表模块
-void print(S *head)
-{
-    int i;
-    S *p = head->next;
-    while (p)//当p不为空的时候执行
-    {
-        printf("%s\t%s\t%.2f\n", p->id, p->name, p->price);
-        //printf("\n");
-        p = p->next;//指针后移
-    }
-}
+
+
