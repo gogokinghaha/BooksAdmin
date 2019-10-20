@@ -1,0 +1,367 @@
+#include <stdio.h>
+#include  <stdlib.h>
+#include <string.h>
+//创建结构体及其成员
+typedef struct Node
+{
+    char id[20];//编号
+    char name[20];//书名
+    //char author[20];//作者
+    //int isexsit;//数量
+    float price;//价格
+    struct Node *next;//指针域
+}S;//结构体定义为S
+   //各函数定义
+void choose();
+void menu(); //菜单函数
+S *create();//创建链表函数
+void input(S *);//新建条目
+void print(S *);//输出链表函数
+void pop_sort(S *);//排序
+void insert(S *);//插入节点函数
+void del(S *);//删除节点函数
+void search4(S *);//价格查找
+void mod(S *);//修改图书信息
+     //主函数
+int main()
+{
+    choose();
+}
+void choose()
+{
+    S *head;
+    int n, a = 1;//n用来控制选择操作类型，a控制循环，以-1终止
+    while (a>0)
+    {
+        menu();//显示菜单
+        printf("请选择你要执行的操作:");
+        scanf("%d", &n);//选择操作
+        switch (n)//各操作数字对应菜单数字，通过n确定操作类型
+        {
+            case 1://创建
+                head = create();
+                break;
+            case 2://输出
+                //printf("图书信息为(按价格排序后)\n");
+                //pop_sort(head);
+                printf("编号\t书名\t价格\n");
+                print(head);
+                break;
+            case 3://插入
+                insert(head);
+                printf("插入后\n");
+                printf("编号\t书名\t价格\n");
+                print(head);
+                break;
+            case 4://删除
+                del(head);
+                printf("删除后\n");
+                printf("编号\t书名\t价格\n");
+                print(head);
+                break;
+            case 5://取值
+                get(head);
+                break;
+            case 6://价格查找
+                search4(head);
+                break;
+            case 7:
+                input(head);
+                printf("编号\t书名\t价格\n");
+                print(head);
+                break;
+            default:
+                a = -1;//跳出循环条件
+                break;
+        }
+    }
+}
+
+//菜单模块直接显示
+void menu()
+{
+    printf("\n\n");
+    printf("\t\t     欢迎使用图书管理系统\n");
+    printf("\t\t|--------------操作------------|\n");
+    printf("\t\t|\t1.创建                 |\n");
+    printf("\t\t|\t2.输出                 |\n");
+    printf("\t\t|\t3.插入                 |\n");
+    printf("\t\t|\t4.删除                 |\n");
+    printf("\t\t|\t5.取值                 |\n");
+    printf("\t\t|\t6.价格搜索             |\n");
+    printf("\t\t|\t7.添加                 |\n");
+    printf("\t\t|\t8.退出程序             |\n");
+    printf("\t\t|------------------------------|\n");
+    printf("\t\t\tchoice(1-7):\n");
+}
+//创建链表模块
+S *create()
+{
+    S *head, *p, *q;//定义指针
+    int i;
+    head = (S *)malloc(sizeof(S));//头节点开辟空间
+    head->next = NULL;//置空头节点的指针域
+    q = head;//q指针记录头节点的地址
+    p = head->next;//p指针记录头节点的指针域的地址
+
+    int num=1;
+    //scanf("%d", &num);
+    while (num != 0)//输入书籍编号输入为零停止循环
+    {
+        p = (S *)malloc(sizeof(S));//p指针开辟空间
+           //输入各成员
+        //p->num = num;
+        printf("请输入书的编号，名字以及价格,用空格隔开\n");
+        scanf("%s %s %f", &p->id, &p->name,&p->price);
+        p->next = NULL;//置空p节点的指针域
+        q->next = p;//p，q节点连接
+        q = p;//q指针后移
+        printf("输入0结束输入,输入1继续输入\n");
+        scanf("%d", &num);
+    }
+    return head;//返回链表的起始地址
+}
+
+void input(S *head)
+{
+    /*int i=0, flag = 1;//flag实现判断指针是否到达最后一个节点
+    S *p, *q, *r; //定义指针便于插入操作
+    r = (S *)malloc(sizeof(S));//为r开辟空间
+    printf("选择要添加的书本信息,包括编号，书名，价格，均用空格隔开\n");
+    scanf("%s %s %f", r->id, r->name, r->price);
+    p = head;//q指针记录头节点的地址
+    q = head->next;
+    while(q != NULL)
+    {
+        p = p->next;//p指针后移
+        q = q->next;//q指针后移
+    }
+    q->next = r;
+    r->next = NULL;*/
+
+    S *p, *q;//定义指针
+    //q = head;//q指针记录头节点的地址
+    p = head->next;//p指针记录头节点的指针域的地址
+    int i = 0;
+    while(p->next != NULL)
+    {
+        p = p->next;
+    }
+    int num=1;
+    //scanf("%d", &num);
+    while (num != 0)//输入书籍编号输入为零停止循环
+    {
+        q = (S *)malloc(sizeof(S));//p指针开辟空间
+           //输入各成员
+        //p->num = num;
+        printf("请输入书的编号，名字以及价格,用空格隔开\n");
+        scanf("%s %s %f", &q->id, &q->name,&q->price);
+        q->next = p->next;
+        p->next = q;//置空p节点的指针域
+        //q = p;//p，q节点连接
+
+        num = 0;
+        //q = p;//q指针后移
+        //printf("输入0结束输入,输入1继续输入\n");
+        //scanf("%d", &num);
+    }
+    return head;//返回链表的起始地址
+
+
+}
+
+//插入节点模块
+void insert(S *head)
+{
+    int i=0, num, flag = 1;//flag实现判断指针是否到达最后一个节点
+    S *p, *q, *r; //定义指针便于插入操作
+    r = (S *)malloc(sizeof(S));//为r开辟空间
+    q = head;//q指针记录头节点的地址
+
+     //printf("please input a book's messages:\n");
+    printf("选择要插入的位置和书本信息,包括编号，书名，价格，均用空格隔开\n");
+    scanf("%d %s %s %f", &num, &r->id, &r->name, &r->price);
+    while(i < num-1 ){
+        q = q->next;
+        i++;
+    }
+    if(q == NULL)
+    {
+        printf("插入位置超过表长");
+    }else
+    {
+        r->next = q->next;
+        q->next = r;
+    }
+
+    /*if(!q || i > num - 1){
+        printf("插入失败");
+    }else{
+        r->next = q->next;
+        q->next = r;
+    }*/
+
+}
+
+//取值
+void get(S *head)
+{
+    S *p, *q;//定义指针
+    int i = 0;
+    int b;//用于输入编号查找删除
+    p = head;//p记录头节点的地址
+    q = head->next;//q记录头节点的指针域的地址
+    printf("输入你要获取的图书位置:");
+    //输入编号
+    scanf("%d", &b);
+    while (q != NULL)//q不为空时执行循环
+    {
+        if (i == (b-1))//判断是否找到输入的编号
+        {
+            //为真时
+            printf("书籍信息\n");
+            printf("编号\t书名\t价格\n");
+            printf("%s\t%s\t%.2f\n", p->id, p->name, p->price);
+            break;
+        }
+        else
+        {
+            i++;
+               //判断为假时
+            p = p->next;//p指针后移
+            q = q->next;//q指针后移
+        }
+    }
+    if (p == NULL)//当查找到最后一个节点还未查到要删除的编号时，输出ERROR INPUT
+    printf("ERROR INPUT\n");
+}
+
+//删除节点模块
+void del(S *head)
+{
+    S *p, *q;//定义指针
+    int i = 0;
+    int b;//用于输入编号查找删除
+    p = head;//p记录头节点的地址
+    q = head->next;//q记录头节点的指针域的地址
+    printf("输入你要删除的图书位置:");
+    //输入编号
+    scanf("%d", &b);
+    while (q != NULL)//q不为空时执行循环
+    {
+        if (i == (b-1))//判断是否找到输入的编号
+      //为真时
+        {
+            p->next = q->next;//断开q节点
+            free(q);//释放q节点neicun
+            q = NULL; //置空q指针防止出现野指针
+        }
+        else
+        {
+            i++;
+            //判断为假时
+            p = p->next;//p指针后移
+            q = q->next;//q指针后移
+        }
+    }
+    if (p == NULL)//当查找到最后一个节点还未查到要删除的编号时，输出ERROR INPUT
+        printf("ERROR INPUT\n");
+}
+
+//价格查找
+void search4(S *head)
+{
+    S *p;//定义指针
+    int price1;//定义num1用于输入查找书籍
+    printf("输入你要查找的价格:");
+    //输入查找编号
+    scanf("%d", &price1);
+    p = head->next;
+    while (p != NULL)
+    {
+        if (p->price==price1)//判断是否找到书籍
+        {
+            //为真时，输出信息
+            printf("书籍信息\n");
+            printf("编号\t书名\t价格\n");
+            printf("%s\t%s\t%.2f\n", p->id, p->name, p->price);
+            break;
+        }
+        else//为假时
+            p = p->next;//指针后移
+    }
+    if (p == NULL)//查找到最后一个节点还未查到要的编号时，输出ERROR INPUT
+        printf("ERROR INPUT\n");
+}
+
+
+//修改信息模块
+/*void mod(S *head)
+{
+ S *p;//定义指针
+ int num1, num2,isexsit1;//定义num1用于输入查找书籍修改信息,num2用于修改
+ char name1[20], author1[20];
+ float price1;
+ printf("input the book's num you are modification:");
+ //输入要修改的图书编号
+ scanf("%d", &num1);
+ p = head->next;
+ while (p != NULL)
+ {
+  if (p->num == num1)//判断是否找到书籍
+  {
+   printf("please input book's num,name,author,isexsit and price again\n");
+   //为真时，重输图书信息
+   scanf("%d %s %s %d %f", &num2, name1, author1, &isexsit1,&price1);
+   p->num = num2;
+   strcpy(p->name, name1);
+   strcpy(p->author, author1);
+   p->isexsit = isexsit1;
+   p->price = price1;
+   break;
+  }
+  else
+   //为假时
+   p = p->next;//指针后移
+ }
+ if (p == NULL)//查找到最后一个节点还未查到要的编号时，输出ERROR INPUT
+  printf("ERROR INPUT\n");
+}
+void pop_sort(S *head)   //链表冒泡排序
+{
+ //排序中没有修改头节点指针值，只是修改指针内容head->next的值
+ S *pre, *p, *tail, *temp;
+ tail = NULL;
+ pre = head;
+ while ((head->next->next) != tail)//(head->next)!=tail同样适用 ，多执行最后一个步比较
+ {
+  p = head->next;
+  pre = head;
+  while (p->next != tail)
+  {
+   if ((p->price)>(p->next->price))
+   {
+    pre->next = p->next; //交换节点方法
+    temp = p->next->next;
+    p->next->next = p;
+    p->next = temp;
+    p = pre->next;  //p回退一个节点
+   }
+   p = p->next;  //p再前进一个节点
+   pre = pre->next;
+  }
+  tail = p;
+ }
+}*/
+//输出链表模块
+void print(S *head)
+{
+    int i;
+    S *p = head->next;
+    while (p)//当p不为空的时候执行
+    {
+        printf("%s\t%s\t%.2f\n", p->id, p->name, p->price);
+        //printf("\n");
+        p = p->next;//指针后移
+    }
+}
