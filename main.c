@@ -364,63 +364,6 @@ void print(S *head)
     }
 }
 
-//修改信息模块
-/*void mod(S *head)
-{
- S *p;//定义指针
- int num1, num2,isexsit1;//定义num1用于输入查找书籍修改信息,num2用于修改
- char name1[20], author1[20];
- float price1;
- printf("input the book's num you are modification:");
- //输入要修改的图书编号
- scanf("%d", &num1);
- p = head->next;
- while (p != NULL)
- {
-  if (p->num == num1)//判断是否找到书籍
-  {
-   printf("please input book's num,name,author,isexsit and price again\n");
-   //为真时，重输图书信息
-   scanf("%d %s %s %d %f", &num2, name1, author1, &isexsit1,&price1);
-   p->num = num2;
-   strcpy(p->name, name1);
-   strcpy(p->author, author1);
-   p->isexsit = isexsit1;
-   p->price = price1;
-   break;
-  }
-  else
-   //为假时
-   p = p->next;//指针后移
- }
- if (p == NULL)//查找到最后一个节点还未查到要的编号时，输出ERROR INPUT
-  printf("ERROR INPUT\n");
-}
-void pop_sort(S *head)   //链表冒泡排序
-{
- //排序中没有修改头节点指针值，只是修改指针内容head->next的值
- S *pre, *p, *tail, *temp;
- tail = NULL;
- pre = head;
- while ((head->next->next) != tail)//(head->next)!=tail同样适用 ，多执行最后一个步比较
- {
-  p = head->next;
-  pre = head;
-  while (p->next != tail)
-  {
-   if ((p->price)>(p->next->price))
-   {
-    pre->next = p->next; //交换节点方法
-    temp = p->next->next;
-    p->next->next = p;
-    p->next = temp;
-    p = pre->next;  //p回退一个节点
-   }
-   p = p->next;  //p再前进一个节点
-   pre = pre->next;
-  }
-  tail = p;
- }
-}*/
+
 
 
