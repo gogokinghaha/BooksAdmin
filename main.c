@@ -5,15 +5,13 @@
 typedef struct Node
 {
     char id[20];//编号
-    char name[20];//书名
-    //char author[20];//作者
-    //int isexsit;//数量
+    char name[50];//书名
     float price;//价格
-    struct Node *next;//指针域
+    struct LNode *next;//指针域
 }S;//结构体定义为S
    //各函数定义
 void choose();
-void menu(); //菜单函数
+void menudisplay(); //菜单函数
 S *create();//创建链表函数
 void input(S *);//新建条目
 void print(S *);//输出链表函数
@@ -34,7 +32,7 @@ void choose()
     int n, a = 1;//n用来控制选择操作类型，a控制循环，以-1终止
     while (a>0)
     {
-        menu();//显示菜单
+        menudisplay();//显示菜单
         printf("请选择你要执行的操作:");
         scanf("%d", &n);//选择操作
         switch (n)//各操作数字对应菜单数字，通过n确定操作类型
@@ -84,22 +82,22 @@ void choose()
 }
 
 //菜单模块直接显示
-void menu()
+void menudisplay()
 {
     printf("\n\n");
-    printf("\t\t     欢迎使用图书管理系统\n");
-    printf("\t\t|--------------操作------------|\n");
-    printf("\t\t|\t1.创建                 |\n");
-    printf("\t\t|\t2.输出                 |\n");
-    printf("\t\t|\t3.插入                 |\n");
-    printf("\t\t|\t4.删除                 |\n");
-    printf("\t\t|\t5.取值                 |\n");
-    printf("\t\t|\t6.价格搜索             |\n");
-    printf("\t\t|\t7.添加                 |\n");
-    printf("\t\t|\t8.文件添加             |\n");
-    printf("\t\t|\t9.退出程序             |\n");
-    printf("\t\t|------------------------------|\n");
-    printf("\t\t\tchoice(1-8):\n");
+    printf("  欢迎使用图书管理系统\n");
+    printf("|----------操作--------|\n");
+    printf("1.创建                 |\n");
+    printf("2.输出                 |\n");
+    printf("3.插入                 |\n");
+    printf("4.删除                 |\n");
+    printf("5.取值                 |\n");
+    printf("6.价格搜索             |\n");
+    printf("7.添加                 |\n");
+    printf("8.文件添加             |\n");
+    printf("0.退出程序             |\n");
+    printf("|----------------------|\n");
+    printf("选择(1-8):\n");
 }
 //创建链表模块
 S *create()
@@ -108,7 +106,7 @@ S *create()
     int i;
     head = (S *)malloc(sizeof(S));//头节点开辟空间
     head->next = NULL;//置空头节点的指针域
-    printf("创建成功");
+    printf("创建成功\n");
     q = head;//q指针记录头节点的地址
     p = head->next;//p指针记录头节点的指针域的地址
 
@@ -130,22 +128,9 @@ S *create()
     return head;//返回链表的起始地址
 }
 
+//添加条目
 void input(S *head)
 {
-    /*int i=0, flag = 1;//flag实现判断指针是否到达最后一个节点
-    S *p, *q, *r; //定义指针便于插入操作
-    r = (S *)malloc(sizeof(S));//为r开辟空间
-    printf("选择要添加的书本信息,包括编号，书名，价格，均用空格隔开\n");
-    scanf("%s %s %f", r->id, r->name, r->price);
-    p = head;//q指针记录头节点的地址
-    q = head->next;
-    while(q != NULL)
-    {
-        p = p->next;//p指针后移
-        q = q->next;//q指针后移
-    }
-    q->next = r;
-    r->next = NULL;*/
 
     S *p, *q;//定义指针
     //q = head;//q指针记录头节点的地址
@@ -334,27 +319,26 @@ void search(S *head)
     //输入查找编号
     scanf("%d", &price1);
     p = head->next;
+    printf("书籍信息\n");
+    printf("编号\t书名\t价格\n");
     while (p != NULL)
     {
         if (p->price==price1)//判断是否找到书籍
         {
             //为真时，输出信息
-            printf("书籍信息\n");
-            printf("编号\t书名\t价格\n");
             printf("%s\t%s\t%.2f\n", p->id, p->name, p->price);
-            break;
+            //break;
         }
-        else//为假时
-            p = p->next;//指针后移
+        p = p->next;//指针后移
     }
     if (p == NULL)//查找到最后一个节点还未查到要的编号时，输出ERROR INPUT
-        printf("ERROR INPUT\n");
+        printf("结束查找\n");
 }
 
 //输出链表模块
 void print(S *head)
 {
-    int i;
+    //int i;
     S *p = head->next;
     while (p)//当p不为空的时候执行
     {
